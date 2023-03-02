@@ -16,6 +16,7 @@ class LightCurriculumApplicationTests {
 //        s.getCurriculum(login);
 //        s.getSemesters();
 //        s.getCurriculumPages();
+        s.getScoreReport();
     }
 
 }
