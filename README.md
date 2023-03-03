@@ -1,2 +1,2 @@
-# LightCurriculum
-一个轻量级的查看课表小程序
+# LightWeightCurriculum
+涓�涓交閲忕骇鐨勬煡鐪嬭琛ㄥ皬绋嬪簭
