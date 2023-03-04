@@ -1,4 +1,4 @@
-package com.lightcurriculum.lightcurriculum.spider;
+package com.lightcurriculum.spider;
 
 import okhttp3.*;
 import org.jetbrains.annotations.NotNull;

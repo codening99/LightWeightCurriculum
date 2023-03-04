@@ -1,4 +1,4 @@
-package com.lightcurriculum.lightcurriculum.Controller;
+package com.lightcurriculum.controller;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

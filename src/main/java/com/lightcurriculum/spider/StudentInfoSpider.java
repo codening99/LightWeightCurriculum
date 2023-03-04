@@ -1,14 +1,11 @@
-package com.lightcurriculum.lightcurriculum.spider;
+package com.lightcurriculum.spider;
 
-import com.lightcurriculum.lightcurriculum.domain.ScoreEntity;
-import com.lightcurriculum.lightcurriculum.utils.AESUtil;
+import com.lightcurriculum.pojo.ScoreEntity;
+import com.lightcurriculum.utils.AESUtil;
 import okhttp3.Response;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -16,6 +13,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 public class StudentInfoSpider {
+
     private final static String LOGIN_URL = "http://cer.imu.edu.cn/authserver/login?service=http://yjs.imu.edu.cn/ssfw/login_cas.jsp";
     private final static String CURRICULUM_URL = "http://yjs.imu.edu.cn/ssfw/pygl/xkgl/xskb.do";
     private final static String QUERY_CURRICULUM_URL = "http://yjs.imu.edu.cn/ssfw/pygl/xkgl/xskb/query.do";
@@ -29,9 +27,9 @@ public class StudentInfoSpider {
     private static final List<ScoreEntity> ALL_SCORES = new ArrayList<>();
 
 
-    public StudentInfoSpider(String studentId, String password) {
+    public StudentInfoSpider(String studentId, String studentPWD) {
         this.STUDENT_ID = studentId;
-        this.PASSWORD = password;
+        this.PASSWORD = studentPWD;
         REQUEST = new JSessionRequest();
     }
 
@@ -49,10 +47,9 @@ public class StudentInfoSpider {
         return html.substring(index, html.indexOf("\"", index));
     }
 
-    public String login() {
-        String body;
+    public boolean login() {
+        System.out.println(LOGIN_URL);
         try {
-
             Response response = REQUEST.get(LOGIN_URL);
             assert response.body() != null;
             String content = response.body().string();
@@ -71,12 +68,11 @@ public class StudentInfoSpider {
             parameters.put("password", aes.encrypt(PASSWORD, salt));
             Response res = REQUEST.post(LOGIN_URL, parameters);
             assert res.body() != null;
-//            System.out.println(res.body().string());
-            body = res.body().string();
+            System.out.println(res.body().string());
         } catch (IOException e) {
-            return null;
+            return false;
         }
-        return body;
+        return true;
     }
 
     /**
@@ -98,7 +94,7 @@ public class StudentInfoSpider {
     }
 
     /**
-     * 获取所有学期课表
+     * 获取所有学期课表界面
      *
      */
     private void getCurriculumPages() throws IOException {
@@ -144,9 +140,9 @@ public class StudentInfoSpider {
             ALL_SCORES.add(score);
         }
 
-        for (ScoreEntity allScore : ALL_SCORES) {
-            System.out.println(allScore);
-        }
+//        for (ScoreEntity allScore : ALL_SCORES) {
+//            System.out.println(allScore);
+//        }
 
     }
 
