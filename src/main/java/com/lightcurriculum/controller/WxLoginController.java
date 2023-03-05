@@ -1,9 +1,9 @@
-package com.lightcurriculum.lightcurriculum.Controller;
+package com.lightcurriculum.controller;
 
-import com.lightcurriculum.lightcurriculum.ErrorCode;
-import com.lightcurriculum.lightcurriculum.ResponseData;
-import com.lightcurriculum.lightcurriculum.spider.JSessionRequest;
-import com.lightcurriculum.lightcurriculum.spider.StudentInfoSpider;
+import com.lightcurriculum.pojo.ErrorCode;
+import com.lightcurriculum.pojo.ResponseData;
+import com.lightcurriculum.spider.JSessionRequest;
+import com.lightcurriculum.spider.StudentInfoSpider;
 import okhttp3.Response;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -73,7 +73,7 @@ public class WxLoginController {
             responseData.putStatus(ErrorCode.REMOTE_LOGIN_ERROR);
         }else{
             responseData.putStatus(ErrorCode.SUCCESS_FETCH_COURSES);
-            responseData.putData(spider.getCurriculum());
+            responseData.putData(spider.getCurriculum("41"));
         }
         return responseData.data();
     }

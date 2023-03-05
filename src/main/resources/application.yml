@@ -1,0 +1,22 @@
+spider:
+  login-url: http://cer.imu.edu.cn/authserver/login?service=http://yjs.imu.edu.cn/ssfw/login_cas.jsp
+  curriculum-url: http://yjs.imu.edu.cn/ssfw/pygl/xkgl/xskb.do
+#  query-curriculum-url-by-semester: http://yjs.imu.edu.cn/ssfw/pygl/xkgl/xskb/query.do
+#  score-report-url: http://yjs.imu.edu.cn/ssfw/pygl/cjgl/cjcx.do
+
+server:
+  port: 8081
+
+spring:
+  datasource:
+    username: root
+    password: root
+    url: jdbc:mysql://localhost:3306/lcdb?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+# mybatis-plus
+mybatis-plus:
+  # xml location
+  mapper-locations: classpath:mapper/*.xml
+
+

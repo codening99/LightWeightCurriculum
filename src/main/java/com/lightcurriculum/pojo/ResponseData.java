@@ -1,4 +1,4 @@
-package com.lightcurriculum.lightcurriculum;
+package com.lightcurriculum.pojo;
 
 import java.util.HashMap;
 

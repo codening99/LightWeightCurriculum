@@ -1,4 +1,4 @@
-package com.lightcurriculum.lightcurriculum.pojo;
+package com.lightcurriculum.pojo;
 
 public class Curriculum {
     //位压缩的方式存储课程的周数

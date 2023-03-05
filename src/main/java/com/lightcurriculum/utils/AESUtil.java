@@ -1,4 +1,4 @@
-package com.lightcurriculum.lightcurriculum.utils;
+package com.lightcurriculum.utils;
 
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
