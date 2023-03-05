@@ -4,10 +4,7 @@ import okhttp3.*;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 class CookieStore implements CookieJar {
@@ -82,14 +79,14 @@ public class JSessionRequest {
         return post(url, null);
     }
 
-    public Response get(String url, HashMap<String, String> getParam) throws IOException {
+    public Response get(String url, Map<String, String> getParam) throws IOException {
         HttpUrl.Builder builder = HttpUrl.parse(url).newBuilder();
         if (getParam != null) {
             for (Map.Entry<String, String> entry : getParam.entrySet()) {
                 builder.addQueryParameter(entry.getKey(), entry.getValue());
             }
         }
-        Request request = new Request.Builder().url(builder.build()).headers(headers).get().build();
+        Request request = new Request.Builder().url(builder.build()).headers(headers).build();
         return client.newCall(request).execute();
     }
 
