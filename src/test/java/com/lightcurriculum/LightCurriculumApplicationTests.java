@@ -1,8 +1,11 @@
 package com.lightcurriculum;
 
+import com.lightcurriculum.pojo.Curriculum;
 import com.lightcurriculum.spider.StudentInfoSpider;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.redis.core.RedisTemplate;
 
 import java.io.IOException;
 
@@ -11,15 +14,8 @@ class LightCurriculumApplicationTests {
 
 
     @Test
-    void contextLoads() {
-        StudentInfoSpider s = new StudentInfoSpider("32209094", "180015");
-//        StudentInfoSpider s = new StudentInfoSpider();
-//        System.out.println(port);
-        s.login();
-//        s.getCurriculum(login);
-//        s.getSemesters();
-//        s.getCurriculumPages();
-//        s.getScoreReport();
+    void contextLoads() throws IOException {
     }
+
 
 }

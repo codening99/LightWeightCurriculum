@@ -4,35 +4,35 @@ import com.lightcurriculum.pojo.Curriculum;
 import com.lightcurriculum.pojo.ScoreEntity;
 import com.lightcurriculum.utils.AESUtil;
 import okhttp3.Response;
-
-import java.io.IOException;
-import java.util.*;
-
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class StudentInfoSpider {
-
+    private static Logger logger = LoggerFactory.getLogger(StudentInfoSpider.class);
     private final static String LOGIN_URL = "http://cer.imu.edu.cn/authserver/login?service=http://yjs.imu.edu.cn/ssfw/login_cas.jsp";
 
     private static final String CURRICULUM_URL = "http://yjs.imu.edu.cn/ssfw/pygl/xkgl/xskb/query.do";
     private final static String SCORES_REPORT_URL = "http://yjs.imu.edu.cn/ssfw/pygl/cjgl/cjcx.do";
-    private JSessionRequest request;
-
-    private final String studentId;
-
-    private final String password; //not encrypted
 
     private boolean isLogin = false;
+
+    private final JSessionRequest request;
+
     private static Map<String, String> semesters;       // 学生的所有可选学期
     private final List<ScoreEntity> all_scores = new ArrayList<>();
 
 
-    public StudentInfoSpider(String studentId, String password) {
-        this.studentId = studentId;
-        this.password = password;
+    public StudentInfoSpider() {
         request = new JSessionRequest();
     }
 
@@ -45,12 +45,15 @@ public class StudentInfoSpider {
         public static final String EXECUTION_FIELD = "<input type=\"hidden\" name=\"execution\" value=\"";
 
     }
+
     private static String getFieldValue(String html, String field) {
         int index = html.indexOf(field) + field.length();
         return html.substring(index, html.indexOf("\"", index));
     }
 
-    public boolean login() {
+    public boolean login(String studentId, String password) {
+        //FIXME 切换级别为debug
+        logger.info("called login");//to debug
         try {
             Response response = request.get(LOGIN_URL);
             String content = response.body().string();
@@ -66,7 +69,8 @@ public class StudentInfoSpider {
             parameters.put("username", studentId);
             parameters.put("password", aes.encrypt(password, salt));
             Response res = request.post(LOGIN_URL, parameters);
-            if(res.body().string().contains("欢迎您")){
+            if (res.body().string().contains("欢迎您")) {
+                logger.info(studentId + " 登录成功");
                 isLogin = true;
                 return true;
             }
@@ -78,10 +82,10 @@ public class StudentInfoSpider {
 
     /**
      * 获取所有可选学期
-     *
      */
     private void getSemesters() throws IOException {
-        assert(isLogin);
+        assert (isLogin);
+        logger.info("getSemester()"); //to debug
         semesters = new HashMap<>();
         Response response = request.get(CURRICULUM_URL);
         assert response.body() != null;
@@ -97,7 +101,8 @@ public class StudentInfoSpider {
 
 
     public void getScoreReport() throws IOException {
-        assert(isLogin);
+        assert (isLogin);
+        logger.info("getScoreReport"); //to debug
         Response response = request.get(SCORES_REPORT_URL);
         assert response.body() != null;
         String scoreReportHtml = response.body().string();
@@ -116,25 +121,30 @@ public class StudentInfoSpider {
     //FIXME 动态SemesterID
 
     public List<Curriculum> getCurriculum(String semesterId) throws IOException {
-        assert(isLogin);
-        Map<String,String> parameters = new HashMap<>();
-        parameters.put("xnxqdm", semesterId);
-        parameters.put("excel","true");
+        assert (isLogin);
+        logger.info("getCurriculm()"); //to debug
+        Map<String, String> parameters = new HashMap<>();
+        parameters.put("xqdm", semesterId);
+        parameters.put("excel", "true");
         Response response = request.post(CURRICULUM_URL, parameters);
         String content = response.body().string();
         Document parse = Jsoup.parse(content);
         Elements trs = parse.getElementsByTag("tr");
         List<Curriculum> list = new ArrayList<>();
+        int trCount = 0;
         for (org.jsoup.nodes.Element tr : trs) {
             Elements tds = tr.getElementsByTag("td");
-            for(int i = 0; i < tds.size(); ++i){
+            for (int i = 0; i < tds.size(); ++i) {
                 String text = tds.get(i).text();
                 String[] split = text.split(" ");
-                if(split.length == 5){
-                    Curriculum curriculum = new Curriculum(split,i - 1);
+                if (split.length == 5) {
+                    int factor = 0;
+                    if (trCount == 2 || trCount == 6 || trCount == 10) factor = 1;
+                    Curriculum curriculum = new Curriculum(split, i - factor);
                     list.add(curriculum);
                 }
             }
+            ++trCount;
         }
         return list;
     }

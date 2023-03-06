@@ -1,5 +1,6 @@
 package com.lightcurriculum.pojo;
 
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -21,15 +22,18 @@ public class StudentEntity {
     @TableId("id")
     private Integer id;
     @TableField("student_id")
-    private String StudentId;
+    private String studentId;
     @TableField("student_pwd")
-    private String StudentPWD;
+    private String studentPassword;
     @TableField("student_name")
-    private String StudentName;
+    private String studentName;
 
-    public StudentEntity(String id, String pwd, String name) {
-        StudentId = id;
-        StudentPWD = pwd;
-        StudentName = name;
+    @TableField("openid")
+    private String openid;
+
+    public StudentEntity(String studentId, String studentPwd, String openid) {
+        this.studentId = studentId;
+        this.studentPassword = studentPwd;
+        this.openid = openid;
     }
 }

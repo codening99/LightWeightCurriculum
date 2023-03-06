@@ -1,46 +1,11 @@
 package com.lightcurriculum.spider;
 
 import okhttp3.*;
-import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-class CookieStore implements CookieJar {
-
-    private final HashMap<String, List<Cookie>> _cookieStore = new HashMap<>();
-
-    @Override
-    public void saveFromResponse(HttpUrl url, @NotNull List<Cookie> cookies) {
-        List<Cookie> currentCookies = _cookieStore.get(url.host());
-        List<Cookie> responseCookies = new ArrayList<>(cookies);
-        if (currentCookies != null && responseCookies.size() > 0 && currentCookies.size() > 0) {
-            for (Cookie currentCookie : currentCookies) {
-
-                if (!responseCookies.contains(currentCookie) && !currentCookie.value().equals("")) {
-                    responseCookies.add(currentCookie);
-                }
-            }
-        }
-        _cookieStore.put(url.host(), responseCookies);
-    }
-
-    @NotNull
-    @Override
-    public List<Cookie> loadForRequest(HttpUrl url) {
-        List<Cookie> cookies = _cookieStore.get(url.host());
-        List<Cookie> requestCookies = new ArrayList<>();
-        if (cookies != null && cookies.size() > 0) {
-            for (Cookie currentCookie : cookies) {
-                if (!currentCookie.value().equals("")) {
-                    requestCookies.add(currentCookie);
-                }
-            }
-        }
-        return requestCookies;
-    }
-}
 
 public class JSessionRequest {
     static final Headers DEFAULT_HEADERS = new Headers.Builder()

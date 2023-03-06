@@ -5,7 +5,7 @@ spider:
 #  score-report-url: http://yjs.imu.edu.cn/ssfw/pygl/cjgl/cjcx.do
 
 server:
-  port: 8081
+  port: 10086
 
 spring:
   datasource:
@@ -13,10 +13,13 @@ spring:
     password: root
     url: jdbc:mysql://localhost:3306/lcdb?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai
     driver-class-name: com.mysql.cj.jdbc.Driver
-
+  data:
+    redis:
+      host: 127.0.0.1
+      port: 6379
+      database: 0
 # mybatis-plus
 mybatis-plus:
   # xml location
   mapper-locations: classpath:mapper/*.xml
-
 

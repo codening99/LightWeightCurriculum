@@ -20,11 +20,10 @@ public class Curriculum {
         //c[4] time
         //parseCourse
         String name = courseInfo[0];
-        int index = name.length() - 1;
-        while (index >= 0 && !Character.isDigit(name.charAt(index))) {
-            index--;
-        }
-        this.courseName = name.substring(index + 1);
+        int index = name.indexOf("：") + 1;
+        while(index < name.length() && Character.isDigit(name.charAt(index)))
+            ++index;
+        this.courseName = name.substring(index);
         index = courseInfo[2].indexOf("：");
         this.teacherName = courseInfo[2].substring(index + 1, courseInfo[2].length() - 1);
         index = courseInfo[3].indexOf("：");
@@ -39,9 +38,8 @@ public class Curriculum {
             } else if (c == '单') {
                 oddWeek = true;
             }
-            if (c == '周') {
+            if (c == '周' && weeks.equals("")) {
                 weeks = courseInfo[4].substring(0, i);
-                break;
             }
         }
         String[] be = weeks.split("-");
@@ -53,7 +51,7 @@ public class Curriculum {
                 this.weekBits |= (1 << i);
             }else if(evenWeek && (i & 1) == 0) {
                 this.weekBits |= (1 << i);
-            }else{
+            }else if(!evenWeek && !oddWeek){
                 this.weekBits |= (1 << i);
             }
         }
@@ -133,7 +131,7 @@ public class Curriculum {
     @Override
     public String toString() {
         return "Curriculum{" +
-                "weekBits=" + weekBits +
+                "weekBits=" + Integer.toBinaryString(weekBits) +
                 ", courseName='" + courseName + '\'' +
                 ", teacherName='" + teacherName + '\'' +
                 ", classroom='" + classroom + '\'' +
